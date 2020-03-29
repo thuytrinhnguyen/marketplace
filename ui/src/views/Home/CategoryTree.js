@@ -41,10 +41,10 @@ function CategoryTree({onCategoryClick, onSubCategoryClick}) {
     >
       {categories.map(c =>
         <TreeItem key={`cat_${c.id}`} nodeId={`cat_${c.id}`} label={c.name}
-                  onClick={() => onCategoryClick(c.id)}>
+                  onClick={() => onCategoryClick(c)}>
           {subCategories.filter(s => s.category.id === c.id).map(s =>
             <TreeItem key={`subcat_${s.id}`} nodeId={`subcat_${s.id}`} label={s.name}
-                      onClick={() => onSubCategoryClick(s.id)}/>
+                      onClick={() => onSubCategoryClick(s)}/>
           )}
         </TreeItem>
       )}

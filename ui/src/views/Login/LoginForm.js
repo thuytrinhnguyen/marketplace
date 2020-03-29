@@ -1,22 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router';
-import validate from 'validate.js';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { Button, TextField } from '@material-ui/core';
+import { useForm } from 'react-hook-form';
 
-const schema = {
-  email: {
-    presence: { allowEmpty: false, message: 'is required' },
-    email: true
-  },
-  password: {
-    presence: { allowEmpty: false, message: 'is required' }
-  }
-};
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -35,93 +24,50 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function LoginForm({ className, ...rest }) {
+function LoginForm({ className, onLogin, ...rest }) {
   const classes = useStyles();
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const [formState, setFormState] = useState({
-    isValid: false,
-    values: {},
-    touched: {},
-    errors: {}
-  });
+  const { register, errors, handleSubmit } = useForm();
 
-  const handleChange = (event) => {
-    event.persist();
-
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      values: {
-        ...prevFormState.values,
-        [event.target.name]:
-          event.target.type === 'checkbox'
-            ? event.target.checked
-            : event.target.value
-      },
-      touched: {
-        ...prevFormState.touched,
-        [event.target.name]: true
-      }
-    }));
+  const handleLogin = (data) => {
+    const { username, password } = data;
+    onLogin(username, password);
   };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    // dispatch(login());
-    history.push('/');
-  };
-
-  const hasError = (field) => (!!(formState.touched[field] && formState.errors[field]));
-
-  useEffect(() => {
-    const errors = validate(formState.values, schema);
-
-    setFormState((prevFormState) => ({
-      ...prevFormState,
-      isValid: !errors,
-      errors: errors || {}
-    }));
-  }, [formState.values]);
 
   return (
-    <form
-      {...rest}
-      className={clsx(classes.root, className)}
-      onSubmit={handleSubmit}
-    >
+    <form onSubmit={handleSubmit(handleLogin)}
+          {...rest}
+          className={clsx(classes.root, className)}>
       <div className={classes.fields}>
         <TextField
-          error={hasError('email')}
+          error={Boolean(errors.username)}
           fullWidth
-          helperText={hasError('email') ? formState.errors.email[0] : null}
-          label="Email address"
-          name="email"
-          onChange={handleChange}
-          value={formState.values.email || ''}
+          helperText={errors.username ? errors.username.message : null}
+          label="Username"
+          name="username"
           variant="outlined"
+          inputRef={register({
+            required: 'Username is required'
+          })}
         />
         <TextField
-          error={hasError('password')}
+          error={Boolean(errors.password)}
           fullWidth
-          helperText={
-            hasError('password') ? formState.errors.password[0] : null
-          }
+          helperText={errors.password ? errors.password.message : null}
           label="Password"
           name="password"
-          onChange={handleChange}
           type="password"
-          value={formState.values.password || ''}
           variant="outlined"
+          inputRef={register({
+            required: 'Password is required'
+          })}
         />
       </div>
       <Button
         className={classes.submitButton}
         color="secondary"
-        disabled={!formState.isValid}
         size="large"
         type="submit"
-        variant="contained"
-      >
+        variant="contained">
         Sign in
       </Button>
     </form>
@@ -129,7 +75,8 @@ function LoginForm({ className, ...rest }) {
 }
 
 LoginForm.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  onLogin: PropTypes.func
 };
 
 export default LoginForm;

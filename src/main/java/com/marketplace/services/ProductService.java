@@ -1,5 +1,6 @@
 package com.marketplace.services;
 
+import com.marketplace.exceptions.ProductNotFoundException;
 import com.marketplace.exceptions.SubCategoryNotFoundException;
 import com.marketplace.models.Product;
 import com.marketplace.models.ProductCreate;
@@ -11,6 +12,8 @@ public interface ProductService {
 
     Product save(ProductCreate productCreate) throws SubCategoryNotFoundException;
 
+    Product findById(Long id) throws ProductNotFoundException;
+
     void deleteById(Long id);
 
     void deleteMultiple(List<Long> idList);
@@ -18,4 +21,6 @@ public interface ProductService {
     List<Product> findAllBySubCategoryId(Long subCatId);
 
     List<Product> findAllByCategoryId(Long catId);
+
+    List<Product> findAllByExample(Product product);
 }

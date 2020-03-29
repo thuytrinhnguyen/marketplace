@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { makeStyles } from '@material-ui/styles';
+import {Link as RouterLink} from 'react-router-dom';
+import {makeStyles} from '@material-ui/styles';
 import {
   Card,
   CardContent,
@@ -13,9 +13,11 @@ import {
 import LockIcon from '@material-ui/icons/Lock';
 import Page from 'src/components/Page';
 import gradients from 'src/utils/gradients';
-import NewLoginForm from './NewLoginForm';
-import { authService } from '../../services/authService';
-import { useHistory } from 'react-router';
+import LoginForm from './LoginForm';
+import {authService} from '../../services/authService';
+import {useHistory} from 'react-router';
+import {useDispatch} from "react-redux";
+import {userActions} from "../../actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,8 +86,15 @@ function Login() {
 
   const history = useHistory();
 
+  const dispatch = useDispatch();
+
   const handleLogin = (username, password) => {
-    authService.login(username, password, history);
+    authService
+      .login(username, password)
+      .then(() => {
+        dispatch(userActions.logIn());
+        history.push('/');
+      });
   };
 
   return (
@@ -105,7 +114,7 @@ function Login() {
           <Typography variant="subtitle2">
             Sign in on the internal platform
           </Typography>
-          <NewLoginForm
+          <LoginForm
             className={classes.loginForm}
             onLogin={handleLogin}
           />

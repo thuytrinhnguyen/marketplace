@@ -61,7 +61,7 @@ export default [
         component: Home
       },
       {
-        path: '/profile',
+        path: '/profile/:username',
         exact: true,
         component: Profile
       },

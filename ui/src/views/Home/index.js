@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import CategoryTree from "./CategoryTree";
 import ProductGrid from "./ProductGrid";
@@ -12,47 +12,42 @@ function Home() {
   const [subCategory, setSubCategory] = useState(null);
   const [products, setProducts] = useState([]);
 
-
-  const handleCategoryClick = (categoryId) => {
-    setSubCategory(null);
-    productService
-      .findAllByCategoryId(categoryId)
+  useEffect(() => {
+    productService.findAll(
+      category ? category.id : null,
+      subCategory ? subCategory.id : null,
+      null)
       .then(products => setProducts(products));
+  }, [category, subCategory]);
 
-    categoryService
-      .findById(categoryId)
-      .then(category => setCategory(category));
+  const handleCategoryClick = (category) => {
+    setSubCategory(null);
+    setCategory(category);
   };
 
-  const handleSubCategoryClick = (subCategoryId) => {
-    productService
-      .findAllBySubCategoryId(subCategoryId)
-      .then(products => setProducts(products));
+  const handleSubCategoryClick = (subCategory) => {
+    setCategory(subCategory.category);
+    setSubCategory(subCategory);
+  };
 
-    subCategoryService
-      .findById(subCategoryId)
-      .then(subCategory => setSubCategory(subCategory));
-  }
-
-
- return(
-   <Fragment>
-    <Grid container>
-      <Grid item md={2}>
-        <CategoryTree
-          onCategoryClick={handleCategoryClick}
-          onSubCategoryClick={handleSubCategoryClick}
-        />
+  return (
+    <Fragment>
+      <Grid container>
+        <Grid item md={2}>
+          <CategoryTree
+            onCategoryClick={handleCategoryClick}
+            onSubCategoryClick={handleSubCategoryClick}
+          />
+        </Grid>
+        <Grid item md={10}>
+          <Typography variant="h2">
+            {category && category.name} {subCategory && ` > ${subCategory.name}`}
+          </Typography>
+          <ProductGrid products={products}/>
+        </Grid>
       </Grid>
-      <Grid item md={10}>
-        <Typography variant="h2">
-          {category && category.name} {subCategory && ` > ${subCategory.name}`}
-        </Typography>
-        <ProductGrid products={products}/>
-      </Grid>
-    </Grid>
-   </Fragment>
- )
+    </Fragment>
+  )
 }
 
 export default Home;

@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import {useDispatch} from "react-redux";
 import {shoppingCartActions} from "../../actions";
+import {snackbarActions} from "../../actions/snackbarActions";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,7 +35,8 @@ function ProductDisplay({product}) {
   const dispatch = useDispatch();
 
   const handleAddProductToCart = (product) => {
-    dispatch(shoppingCartActions.addProduct(product))
+    dispatch(shoppingCartActions.addProduct(product));
+    dispatch(snackbarActions.success("Product has been added to cart!"))
   };
 
   return (
@@ -60,7 +62,7 @@ function ProductDisplay({product}) {
                 <Grid item><AddShoppingCartIcon/></Grid>
                 <Grid item>
                   <Typography variant="body2" style={{cursor: 'pointer'}}
-                              onClick={(product) => handleAddProductToCart(product)}>
+                              onClick={() => handleAddProductToCart(product)}>
                     Add to Cart
                   </Typography>
                 </Grid>

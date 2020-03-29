@@ -1,6 +1,6 @@
 package com.marketplace.services.impl;
 
-import com.marketplace.entities.SubCategory;
+import com.marketplace.exceptions.ProductNotFoundException;
 import com.marketplace.exceptions.SubCategoryNotFoundException;
 import com.marketplace.models.ProductCreate;
 import com.marketplace.repositories.SubCategoryRepository;
@@ -9,6 +9,7 @@ import com.marketplace.mappers.ProductMapper;
 import com.marketplace.models.Product;
 import com.marketplace.repositories.ProductRepository;
 import com.marketplace.services.ProductService;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public class ProductServiceImpl implements ProductService {
         this.repository = repository;
         this.productMapper = productMapper;
         this.subCategoryRepository = subCategoryRepository;
+
+
     }
 
     public List<Product> findAll() {
@@ -41,6 +44,12 @@ public class ProductServiceImpl implements ProductService {
         entity.setSubCategory(subCategory);
 
         entity = repository.save(entity);
+        return productMapper.toModel(entity);
+    }
+
+    @Override
+    public Product findById(Long id) throws ProductNotFoundException {
+        var entity = repository.findById(id).orElseThrow(ProductNotFoundException::new);
         return productMapper.toModel(entity);
     }
 
@@ -62,6 +71,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findAllByCategoryId(Long catId) {
         var entities = repository.findAllBySubCategory_Category_Id(catId);
+        return productMapper.toModels(entities);
+    }
+
+    @Override
+    public List<Product> findAllByExample(Product product) {
+        var entity = productMapper.toEntity(product);
+        var entities = repository.findAll(Example.of(entity));
         return productMapper.toModels(entities);
     }
 }

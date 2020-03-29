@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./Header";
-import ProductList from "./ProductList";
+import UserProductList from "./UserProductList";
 import About from "./About";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {
@@ -59,7 +59,7 @@ function Profile() {
         <Tab label="About"/>
       </Tabs>
       <TabPanel value={value} index={0}>
-        <ProductList/>
+        <UserProductList/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <About/>

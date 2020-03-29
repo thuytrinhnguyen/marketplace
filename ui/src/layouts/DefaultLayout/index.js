@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/styles';
 import {LinearProgress} from '@material-ui/core';
 import TopBar from "./TopBar";
+import MessageSnackbar from "../../components/MessageSnackbar";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -37,6 +38,7 @@ function DefaultLayout({route}) {
           </Suspense>
         </div>
       </div>
+      <MessageSnackbar/>
     </>
   );
 }

@@ -11,17 +11,18 @@ export const authService = {
   getFirstName,
   getLastName,
   getProfilePicture,
+  getTitle,
+  getUsername,
   getClaims
 };
 
-function login(username, password, history) {
-  axios.post('/auth', {username, password})
+function login(username, password) {
+  return axios.post('/auth', {username, password})
     .catch(handleError)
     .then(handleResponse)
     .then((data) => {
         localStorage.setItem('token', data.token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
-        history.push('/');
       }
     );
 }
@@ -37,9 +38,9 @@ function logout(history) {
 }
 
 function getClaim(claim) {
-  const token = token();
-  if (!token) return null;
-  const decoded = jwtDecode(token);
+  const t = token();
+  if (!t) return null;
+  const decoded = jwtDecode(t);
   return decoded[claim];
 }
 
@@ -60,5 +61,14 @@ function getLastName() {
 
 function getProfilePicture() {
   return getClaim('profile_picture');
-
 }
+
+function getTitle() {
+  return getClaim('title');
+}
+
+function getUsername() {
+  return getClaim('sub');
+}
+
+

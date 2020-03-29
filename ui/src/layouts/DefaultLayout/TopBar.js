@@ -1,11 +1,11 @@
-/* eslint-disable no-unused-vars */
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {Link as RouterLink} from 'react-router-dom';
 import {useHistory} from 'react-router';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {useDispatch, useSelector} from 'react-redux';
 import {makeStyles} from '@material-ui/styles';
+import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined';
 
 import {
   AppBar,
@@ -22,16 +22,18 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  ClickAwayListener
+  ClickAwayListener, Avatar, Container
 } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import AccountBoxOutlinedIcon from '@material-ui/icons/AccountBoxOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {authService} from '../../services/authService';
-import AddProductDialog from "./AddProductDialog";
+import AddProductDialog from "../../components/AddProductDialog";
+import CartPopover from "../../components/Cart/CartPopover";
+import {userService} from "../../services/userService";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,20 +70,35 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1)
   },
   menuButton: {
-    marginRight: theme.spacing(1),
-    marginLeft: theme.spacing(2),
+    marginLeft: theme.spacing(0.5),
   },
-  chatButton: {
-    marginLeft: theme.spacing(1)
+  sellButton: {
+    marginLeft: theme.spacing(0.5)
+  },
+  sellIcon: {
+  },
+  notificationButton: {
+  },
+  shoppingCartButton: {
+    marginLeft: theme.spacing(0.5)
   },
   accountButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(0.5)
   },
   logoutButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(0.5)
   },
   logoutIcon: {
     marginRight: theme.spacing(1)
+  },
+  avatar: {
+    border: `0.5px solid ${theme.palette.common.white}`,
+    height: 30,
+    width: 30,
+    marginRight: 10,
+  },
+  name: {
+    color: theme.palette.common.white
   }
 }));
 
@@ -101,12 +118,22 @@ function TopBar({
   const classes = useStyles();
   const history = useHistory();
   const searchRef = useRef(null);
-  const shoppingCartReducers = useSelector(state => state.shoppingCartReducer);
+  const shoppingCartReducer = useSelector(state => state.shoppingCartReducer);
+  const userReducer = useSelector(state => state.userReducer);
   const [openSearchPopover, setOpenSearchPopover] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [addProductDialogOpen, setAddProductDialogOpen] = useState(false);
+  const [openViewCartPopover, setOpenViewCartPopover] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const {products} = shoppingCartReducers;
+  const {username} = userReducer;
+  const {products} = shoppingCartReducer;
+
+  useEffect(() => {
+    userService
+      .findByUsername(username)
+      .then(user => setUser(user))
+  });
 
   const handleLogout = () => {
     authService.logout(history);
@@ -128,125 +155,138 @@ function TopBar({
     setOpenSearchPopover(false);
   };
 
+  const handleViewCart = () => {
+    setOpenViewCartPopover(true);
+  };
 
   return (
-    <AppBar
-      {...rest}
-      className={clsx(classes.root, className)}
-      color="primary"
-    >
-      <Toolbar>
-        <Hidden lgUp>
-          <IconButton
-            className={classes.menuButton}
-            color="inherit"
-            onClick={onOpenNavBarMobile}
-          >
-            <MenuIcon/>
-          </IconButton>
-        </Hidden>
-        <RouterLink to="/">
-          <img
-            alt="Logo"
-            src="/images/logos/logo--white.svg"
-          />
-        </RouterLink>
-        <div className={classes.flexGrow}/>
-        <Hidden smDown>
-          <div
-            className={classes.search}
-            ref={searchRef}
-          >
-            <SearchIcon className={classes.searchIcon}/>
-            <Input
-              className={classes.searchInput}
-              disableUnderline
-              onChange={handleSearchChange}
-              placeholder="Search people &amp; places"
-              value={searchValue}
+    <div>
+      {user &&
+      <AppBar
+        {...rest}
+        className={clsx(classes.root, className)}
+        color="primary"
+      >
+        <Toolbar>
+          <Hidden lgUp>
+            <IconButton
+              className={classes.menuButton}
+              color="inherit"
+              onClick={onOpenNavBarMobile}
+            >
+              <MenuIcon/>
+            </IconButton>
+          </Hidden>
+          <RouterLink to="/">
+            <img
+              alt="Logo"
+              src="/images/logos/logo--white.svg"
             />
-          </div>
-          <Popper
-            anchorEl={searchRef.current}
-            className={classes.searchPopper}
-            open={openSearchPopover}
-            transition
-          >
-            <ClickAwayListener onClickAway={handleSearchPopverClose}>
-              <Paper
-                className={classes.searchPopperContent}
-                elevation={3}
-              >
-                <List>
-                  {popularSearches.map((search) => (
-                    <ListItem
-                      button
-                      key={search}
-                      onClick={handleSearchPopverClose}
-                    >
-                      <ListItemIcon>
-                        <SearchIcon/>
-                      </ListItemIcon>
-                      <ListItemText primary={search}/>
-                    </ListItem>
-                  ))}
-                </List>
-              </Paper>
-            </ClickAwayListener>
-          </Popper>
-        </Hidden>
-        <Button
-          variant={"contained"}
-          className={classes.menuButton}
-          onClick={() => setAddProductDialogOpen(true)}>
-          Sell Something
-        </Button>
-        <IconButton
-          className={classes.accountButton}
-          color="inherit"
-        >
-          <Badge
-            color="secondary"
-          >
-            <AccountBoxOutlinedIcon onClick={() => history.push('/profile')}/>
-          </Badge>
-        </IconButton>
-        <IconButton
-          className={classes.chatButton}
-          color="inherit"
-        >
-          <Badge
-            badgeContent={2}
-            color="secondary"
-          >
-            <NotificationsIcon/>
-          </Badge>
-        </IconButton>
-        <IconButton
-          className={classes.chatButton}
-          color="inherit"
-        >
-          <Badge
-            badgeContent={products.length}
-            color="secondary"
-          >
-            <ShoppingCartIcon/>
-          </Badge>
-        </IconButton>
-        <Hidden mdDown>
-          <Button
-            className={classes.logoutButton}
+          </RouterLink>
+          <div className={classes.flexGrow}/>
+          <Hidden smDown>
+            <div
+              className={classes.search}
+              ref={searchRef}
+            >
+              <SearchIcon className={classes.searchIcon}/>
+              <Input
+                className={classes.searchInput}
+                disableUnderline
+                onChange={handleSearchChange}
+                placeholder="Search people &amp; places"
+                value={searchValue}
+              />
+            </div>
+            <Popper
+              anchorEl={searchRef.current}
+              className={classes.searchPopper}
+              open={openSearchPopover}
+              transition
+            >
+              <ClickAwayListener onClickAway={handleSearchPopverClose}>
+                <Paper
+                  className={classes.searchPopperContent}
+                  elevation={3}
+                >
+                  <List>
+                    {popularSearches.map((search) => (
+                      <ListItem
+                        button
+                        key={search}
+                        onClick={handleSearchPopverClose}
+                      >
+                        <ListItemIcon>
+                          <SearchIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary={search}/>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Paper>
+              </ClickAwayListener>
+            </Popper>
+          </Hidden>
+          <IconButton>
+            <Avatar
+              alt="Person"
+              className={classes.avatar}
+              src={user.profilePicture}
+            />
+            <Typography
+              className={classes.name}
+              variant='h6'
+              onClick={() => history.push(`/profile/${username}`)}
+            >
+              {user.firstName}
+            </Typography>
+          </IconButton>
+          <IconButton
+            className={classes.notificationButton}
             color="inherit"
-            onClick={handleLogout}
           >
-            <InputIcon className={classes.logoutIcon}/>
-            Sign out
-          </Button>
-        </Hidden>
-      </Toolbar>
-      <AddProductDialog open={addProductDialogOpen} onClose={() => setAddProductDialogOpen(false)}/>
-    </AppBar>
-  );
+            <Badge
+              badgeContent={2}
+              color="secondary"
+            >
+              <NotificationsIcon/>
+            </Badge>
+          </IconButton>
+          <IconButton
+            className={classes.shoppingCartButton}
+            color="inherit"
+          >
+            <Badge
+              badgeContent={products.length > 0 ? products.reduce((a, b) => a + b.quantity, 0) : 0}
+              color="secondary"
+            >
+              <ShoppingCartIcon onClick={handleViewCart}/>
+            </Badge>
+          </IconButton>
+          <Hidden mdDown>
+            <Button
+              className={classes.sellButton}
+              color="inherit"
+              onClick={() => setAddProductDialogOpen(true)}>
+              <AttachMoneyOutlinedIcon className={classes.sellIcon}/>
+              Sell
+            </Button>
+            <Button
+              className={classes.logoutButton}
+              color="inherit"
+              onClick={handleLogout}
+            >
+              <InputIcon className={classes.logoutIcon}/>
+              Sign out
+            </Button>
+          </Hidden>
+        </Toolbar>
+        <AddProductDialog open={addProductDialogOpen} onClose={() => setAddProductDialogOpen(false)}/>
+        <CartPopover onClose={() => setOpenViewCartPopover(false)} open={openViewCartPopover}/>
+      </AppBar>}
+    </div>
+  )
+    ;
 }
 
 TopBar.propTypes = {

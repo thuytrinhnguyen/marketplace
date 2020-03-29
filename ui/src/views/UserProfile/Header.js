@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Link as RouterLink, useParams} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles';
 import {
   Container,
   Avatar,
@@ -10,14 +10,13 @@ import {
   Button,
   Hidden,
   IconButton,
-  Snackbar,
   Tooltip,
   colors
 } from '@material-ui/core';
 import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ChatIcon from '@material-ui/icons/ChatOutlined';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import {userService} from "../../services/userService";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -104,129 +103,71 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Header({ className, ...rest }) {
+function Header({className, ...rest}) {
   const classes = useStyles();
-  const user = {
-    name: 'Shen Zhi',
-    bio: 'Web Developer',
-    avatar: '/images/avatars/avatar_11.png',
-    cover: '/images/covers/cover_2.jpg',
-    connectedStatus: 'not_connected'
-  };
-  const [connectedStatus, setConnectedStatus] = useState(user.connectedStatus);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-
-  const handleConnectToggle = () => {
-    setConnectedStatus((prevConnectedStatus) => (prevConnectedStatus === 'not_connected' ? 'pending' : 'not_connected'));
-  };
-
-  const handleSnackbarClose = () => {
-    setOpenSnackbar(false);
-  };
+  const [user, setUser] = useState(null);
+  const {username} = useParams();
 
   useEffect(() => {
-    if (connectedStatus === 'pending') {
-      setOpenSnackbar(true);
-    }
-  }, [connectedStatus]);
+    userService
+      .findByUsername(username)
+      .then(user => setUser(user))
+  }, [username]);
 
   return (
-    <div
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <div
-        className={classes.cover}
-        style={{ backgroundImage: `url(${user.cover})` }}
-      >
-        <Button
-          className={classes.changeButton}
-          variant="contained"
-        >
-          <AddPhotoIcon className={classes.addPhotoIcon} />
-          Change Cover
-        </Button>
-      </div>
-      <Container
-        maxWidth="lg"
-        className={classes.container}
-      >
-        <Avatar
-          alt="Person"
-          className={classes.avatar}
-          src={user.avatar}
-        />
-        <div className={classes.details}>
-          <Typography
-            component="h2"
-            gutterBottom
-            variant="overline"
-          >
-            {user.bio}
-          </Typography>
-          <Typography
-            component="h1"
-            variant="h4"
-          >
-            {user.name}
-          </Typography>
+    <div>
+      {user && <div
+        {...rest}
+        className={clsx(classes.root, className)}>
+        <div
+          className={classes.cover}
+          style={{backgroundImage: ``}}>
+          <Button
+            className={classes.changeButton}
+            variant="contained">
+            <AddPhotoIcon className={classes.addPhotoIcon}/>
+            Change Cover
+          </Button>
         </div>
-        <Hidden smDown>
-          <div className={classes.actions}>
-            <Button
-              color="secondary"
-              component={RouterLink}
-              to="/chat"
-              variant="contained"
+        <Container
+          maxWidth="lg"
+          className={classes.container}
+        >
+          <Avatar
+            alt="Person"
+            className={classes.avatar}
+            src={user.profilePicture}
+          />
+          <div className={classes.details}>
+            <Typography
+              component="h2"
+              gutterBottom
+              variant="overline"
             >
-              <ChatIcon className={classes.mailIcon} />
-              Send message
-            </Button>
-            {connectedStatus === 'not_connected' && (
-              <Button
-                color="primary"
-                onClick={handleConnectToggle}
-                variant="contained"
-              >
-                <PersonAddIcon className={classes.personAddIcon} />
-                Add connection
-              </Button>
-            )}
-            {connectedStatus === 'pending' && (
-              <Button
-                className={classes.pendingButton}
-                onClick={handleConnectToggle}
-                variant="contained"
-              >
-                <PersonAddIcon className={classes.personAddIcon} />
-                Pending connection
-              </Button>
-            )}
-            <Tooltip title="More options">
-              <IconButton>
-                <MoreIcon />
-              </IconButton>
-            </Tooltip>
+              {user.title}
+            </Typography>
+            <Typography
+              component="h1"
+              variant="h4"
+            >
+              {`${user.firstName} ${user.lastName}`}
+            </Typography>
           </div>
-        </Hidden>
-      </Container>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left'
-        }}
-        autoHideDuration={6000}
-        message={(
-          <Typography
-            color="inherit"
-            variant="h6"
-          >
-            Sent connection request
-          </Typography>
-        )}
-        onClose={handleSnackbarClose}
-        open={openSnackbar}
-      />
+          <Hidden smDown>
+            <div className={classes.actions}>
+              <Button
+                color="secondary"
+                component={RouterLink}
+                to="/chat"
+                variant="contained"
+              >
+                <ChatIcon className={classes.mailIcon}/>
+                Send message
+              </Button>
+            </div>
+          </Hidden>
+        </Container>
+      </div>}
     </div>
   );
 }

@@ -9,4 +9,6 @@ public class SubCategory {
     private String name;
 
     private Category category;
+
+    private String createdBy;
 }

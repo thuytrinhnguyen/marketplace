@@ -12,11 +12,13 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import {categoryService} from "../../services/categoryService";
-import {subCategoryService} from "../../services/subCategoryService";
+import {categoryService} from "../services/categoryService";
+import {subCategoryService} from "../services/subCategoryService";
 import {useForm} from "react-hook-form";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import {productService} from "../../services/productService";
+import {productService} from "../services/productService";
+import {useDispatch} from "react-redux";
+import {snackbarActions} from "../actions/snackbarActions";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,11 +39,11 @@ function AddProductDialog({open, onClose}) {
   const classes = useStyles();
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-
-  const {register, setValue, handleSubmit, errors} = useForm();
-
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSubCategory, setSelectedSubCategory] = useState('');
+  const {register, setValue, handleSubmit, errors} = useForm();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     register({name: "category"}, {required: "Category is required"});
@@ -77,7 +79,9 @@ function AddProductDialog({open, onClose}) {
 
   const handleSave = (data) => {
     const {name, price, description, subCategory} = data;
-    productService.saveProduct(name, price, description, subCategory);
+    const image = "https://assets.pcmag.com/media/images/582790-meet-the-microsoft-surface-pro-7.jpg";
+    productService.saveProduct(name, price, description, image, subCategory);
+    dispatch(snackbarActions.success("Product has been added!"));
     onClose();
   };
 
