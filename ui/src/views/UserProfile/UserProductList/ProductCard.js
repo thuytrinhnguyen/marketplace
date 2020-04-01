@@ -88,7 +88,7 @@ function ProductCard({product, className, ...rest}) {
         >
           <Grid item>
             <Typography variant="h4">
-              ${product.price}
+              ${product.price.toFixed(2)}
             </Typography>
           </Grid>
           <Grid item>
@@ -108,7 +108,7 @@ function ProductCard({product, className, ...rest}) {
             <Link
               color="textPrimary"
               component={RouterLink}
-              to="/profile"
+              to={`/products/${product.id}`}
               variant="h6"
             >
               {product.name.length > product.name.substring(0, 65).length ? `${product.name.substring(0, 65)} ...` : product.name}

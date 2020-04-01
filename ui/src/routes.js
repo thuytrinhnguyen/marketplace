@@ -5,7 +5,6 @@ import ErrorLayout from './layouts/Error';
 import PrivateRoute from './privateRoute';
 import DefaultLayout from "./layouts/DefaultLayout";
 import Home from "./views/Home";
-import Profile from "./views/UserProfile";
 
 export default [
   {
@@ -63,7 +62,17 @@ export default [
       {
         path: '/profile/:username',
         exact: true,
-        component: Profile
+        component: lazy(() => import('src/views/UserProfile'))
+      },
+      {
+        path: '/products/:id',
+        exact: true,
+        component: lazy(() => import('src/views/ProductDetails'))
+      },
+      {
+        path: '/checkout',
+        exact: true,
+        component: lazy(() => import('src/views/Checkout'))
       },
       {
         component: () => <Redirect to="/errors/error-404"/>

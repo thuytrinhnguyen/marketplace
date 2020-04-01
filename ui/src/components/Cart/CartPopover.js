@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link as RouterLink} from 'react-router-dom';
+import {Link as RouterLink, useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/styles';
 import {
@@ -14,7 +14,7 @@ import CartProductList from "./CartProductList";
 
 const useStyles = makeStyles(() => ({
   root: {
-    width: 350,
+    width: 550,
     maxWidth: '100%'
   },
   actions: {
@@ -25,6 +25,7 @@ const useStyles = makeStyles(() => ({
 
 function CartPopover({...rest}) {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Popover
@@ -46,7 +47,7 @@ function CartPopover({...rest}) {
             color="primary"
             variant="contained"
             size="small"
-            to="#"
+            onClick={() => history.push('/checkout')}
           >
             Check Out
           </Button>

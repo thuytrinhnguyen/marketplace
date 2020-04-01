@@ -75,10 +75,8 @@ const useStyles = makeStyles((theme) => ({
   sellButton: {
     marginLeft: theme.spacing(0.5)
   },
-  sellIcon: {
-  },
-  notificationButton: {
-  },
+  sellIcon: {},
+  notificationButton: {},
   shoppingCartButton: {
     marginLeft: theme.spacing(0.5)
   },
@@ -124,16 +122,10 @@ function TopBar({
   const [searchValue, setSearchValue] = useState('');
   const [addProductDialogOpen, setAddProductDialogOpen] = useState(false);
   const [openViewCartPopover, setOpenViewCartPopover] = useState(false);
-  const [user, setUser] = useState(null);
 
-  const {username} = userReducer;
+  const {username, firstName, profilePicture} = userReducer;
   const {products} = shoppingCartReducer;
 
-  useEffect(() => {
-    userService
-      .findByUsername(username)
-      .then(user => setUser(user))
-  });
 
   const handleLogout = () => {
     authService.logout(history);
@@ -161,7 +153,6 @@ function TopBar({
 
   return (
     <div>
-      {user &&
       <AppBar
         {...rest}
         className={clsx(classes.root, className)}
@@ -227,18 +218,17 @@ function TopBar({
               </ClickAwayListener>
             </Popper>
           </Hidden>
-          <IconButton>
+          <IconButton onClick={() => history.push(`/profile/${username}`)}>
             <Avatar
               alt="Person"
               className={classes.avatar}
-              src={user.profilePicture}
+              src={profilePicture}
             />
             <Typography
               className={classes.name}
               variant='h6'
-              onClick={() => history.push(`/profile/${username}`)}
             >
-              {user.firstName}
+              {firstName}
             </Typography>
           </IconButton>
           <IconButton
@@ -283,7 +273,7 @@ function TopBar({
         </Toolbar>
         <AddProductDialog open={addProductDialogOpen} onClose={() => setAddProductDialogOpen(false)}/>
         <CartPopover onClose={() => setOpenViewCartPopover(false)} open={openViewCartPopover}/>
-      </AppBar>}
+      </AppBar>
     </div>
   )
     ;

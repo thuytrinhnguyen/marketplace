@@ -4,11 +4,18 @@ import {handleError} from '../helpers/handleError';
 
 export const productService = {
   findAll,
+  findById,
   saveProduct
 };
 
 function findAll(categoryId, subCategoryId, username) {
   return axios.get(`/products/?s=a76c${categoryId ? `&categoryId=${categoryId}` : ''}${subCategoryId ? `&subCategoryId=${subCategoryId}` : ''}${username ? `&username=${username}` : ''}`)
+    .catch(handleError)
+    .then(handleResponse);
+}
+
+function findById(id) {
+  return axios.get(`/products/${id}`)
     .catch(handleError)
     .then(handleResponse);
 }

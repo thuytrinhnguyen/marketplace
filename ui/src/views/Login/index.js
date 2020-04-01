@@ -100,7 +100,6 @@ function Login() {
   return (
     <Page
       className={classes.root}
-      title="Login"
     >
       <Card className={classes.card}>
         <CardContent className={classes.content}>

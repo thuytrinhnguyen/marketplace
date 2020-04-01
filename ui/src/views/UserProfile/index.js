@@ -10,6 +10,8 @@ import {
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
+import Page from "../../components/Page";
+import {useSelector} from "react-redux";
 
 
 function TabPanel(props) {
@@ -43,16 +45,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-function Profile() {
+function UserProfile() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const userReducer = useSelector(state => state.userReducer);
+  const {firstName, lastName} = userReducer;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
-    <div>
+    <Page title={`${firstName} ${lastName}`}>
       <Header/>
       <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
         <Tab label="Product"/>
@@ -64,8 +68,8 @@ function Profile() {
       <TabPanel value={value} index={1}>
         <About/>
       </TabPanel>
-    </div>
+    </Page>
   )
 }
 
-export default Profile;
+export default UserProfile;
