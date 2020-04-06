@@ -67,7 +67,7 @@ function Checkout() {
                 </TableHead>
                 <TableBody>
                   {products.map(p =>
-                    <TableRow>
+                    <TableRow key={p.id}>
                       <TableCell>
                         <CardMedia className={classes.image} image={`${p.image}`}/>
                       </TableCell>

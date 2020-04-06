@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Link as RouterLink, useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -20,8 +20,7 @@ import {
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import ButtonBase from "@material-ui/core/ButtonBase";
 import {useDispatch} from "react-redux";
-import {shoppingCartActions} from "../../../actions";
-import {snackbarActions} from "../../../actions/snackbarActions";
+import {shoppingCartActions, snackbarActions} from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -52,7 +51,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'block',
     maxWidth: '100%',
     maxHeight: '100%',
-    paddingLeft: 60,
+    paddingLeft: 30,
+    paddingRight:30,
     paddingTop: 30,
     paddingBottom: 30
   },
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ProductCard({product, className, ...rest}) {
+function HomeProductCard({product, className, ...rest}) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -80,7 +80,7 @@ function ProductCard({product, className, ...rest}) {
           className={classes.image}
           onClick={() => history.push(`/products/${product.id}`)}
         >
-          <img className={classes.img} alt={product.name} src={product.image}/>
+          <img className={classes.img} alt="complex" src={product.image}/>
         </ButtonBase>
         <Divider/>
         <Grid container
@@ -114,7 +114,7 @@ function ProductCard({product, className, ...rest}) {
               to={`/products/${product.id}`}
               variant="h6"
             >
-              {product.name.length > product.name.substring(0, 65).length ? `${product.name.substring(0, 65)} ...` : product.name}
+              {product.name.length > 50 ? `${product.name.substring(0, 50)} ...` : product.name}
             </Link>
           )}
         />
@@ -123,9 +123,9 @@ function ProductCard({product, className, ...rest}) {
   );
 }
 
-ProductCard.propTypes = {
+HomeProductCard.propTypes = {
   className: PropTypes.string,
   product: PropTypes.object.isRequired
 };
 
-export default ProductCard;
+export default HomeProductCard;

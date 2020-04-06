@@ -7,6 +7,9 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {categoryService} from "../../services/categoryService";
 import {subCategoryService} from "../../services/subCategoryService";
 import PropTypes from "prop-types";
+import {useDispatch} from "react-redux";
+import {homeProductsReducer} from "../../reducers/homeProductsReducer";
+import {homeProductsActions} from "../../actions";
 
 const useStyles = makeStyles({
   root: {
@@ -16,10 +19,11 @@ const useStyles = makeStyles({
   },
 });
 
-function CategoryTree({onCategoryClick, onSubCategoryClick}) {
+function CategoryTree() {
   const classes = useStyles();
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
       categoryService
@@ -40,21 +44,23 @@ function CategoryTree({onCategoryClick, onSubCategoryClick}) {
       defaultExpandIcon={<ChevronRightIcon/>}
     >
       {categories.map(c =>
-        <TreeItem key={`cat_${c.id}`} nodeId={`cat_${c.id}`} label={c.name}
-                  onClick={() => onCategoryClick(c)}>
+        <TreeItem
+          key={`cat_${c.id}`}
+          nodeId={`cat_${c.id}`}
+          label={c.name}
+          onClick={() => dispatch(homeProductsActions.filterByCategory(c.id, c.name))}>
+
           {subCategories.filter(s => s.category.id === c.id).map(s =>
-            <TreeItem key={`subcat_${s.id}`} nodeId={`subcat_${s.id}`} label={s.name}
-                      onClick={() => onSubCategoryClick(s)}/>
+            <TreeItem
+              key={`subcat_${s.id}`}
+              nodeId={`subcat_${s.id}`}
+              label={s.name}
+              onClick={() => dispatch(homeProductsActions.filterBySubCategory(c.id, c.name, s.id, s.name))}/>
           )}
         </TreeItem>
       )}
     </TreeView>
   );
 }
-
-CategoryTree.propTypes = {
-  onCategoryClick: PropTypes.func,
-  onSubCategoryClick: PropTypes.func,
-};
 
 export default CategoryTree;

@@ -34,6 +34,7 @@ import AddProductDialog from "../../components/AddProductDialog";
 import CartPopover from "../../components/Cart/CartPopover";
 import {userService} from "../../services/userService";
 import Typography from "@material-ui/core/Typography";
+import ToggleDrawer from "./ToggleDrawer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -122,7 +123,7 @@ function TopBar({
   const [searchValue, setSearchValue] = useState('');
   const [addProductDialogOpen, setAddProductDialogOpen] = useState(false);
   const [openViewCartPopover, setOpenViewCartPopover] = useState(false);
-
+  const [openToggleDrawer, setOpenToggleDrawer] = useState(false);
   const {username, firstName, profilePicture} = userReducer;
   const {products} = shoppingCartReducer;
 
@@ -163,7 +164,7 @@ function TopBar({
             <IconButton
               className={classes.menuButton}
               color="inherit"
-              onClick={onOpenNavBarMobile}
+              onClick={() => setOpenToggleDrawer(true)}
             >
               <MenuIcon/>
             </IconButton>
@@ -271,8 +272,18 @@ function TopBar({
             </Button>
           </Hidden>
         </Toolbar>
-        <AddProductDialog open={addProductDialogOpen} onClose={() => setAddProductDialogOpen(false)}/>
-        <CartPopover onClose={() => setOpenViewCartPopover(false)} open={openViewCartPopover}/>
+        <AddProductDialog
+          open={addProductDialogOpen}
+          onClose={() => setAddProductDialogOpen(false)}
+        />
+        <CartPopover
+          open={openViewCartPopover}
+          onClose={() => setOpenViewCartPopover(false)}
+        />
+        <ToggleDrawer
+          open={openToggleDrawer}
+          onClose={() => setOpenToggleDrawer(false)}
+        />
       </AppBar>
     </div>
   )

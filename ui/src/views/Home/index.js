@@ -1,52 +1,43 @@
 import React, {Fragment, useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import CategoryTree from "./CategoryTree";
-import ProductGrid from "./ProductGrid";
-import {productService} from "../../services/productService";
-import {categoryService} from "../../services/categoryService";
-import {subCategoryService} from "../../services/subCategoryService";
 import {Typography} from "@material-ui/core";
+import HomeProductGrid from "./HomeProductGrid";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import {useSelector} from "react-redux";
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+  heading: {
+    marginTop: theme.spacing(2),
+  },
+  categoryTree: {
+    marginTop: theme.spacing(2),
+    marginLeft: theme.spacing(2),
+  }
+}));
 
 function Home() {
-  const [category, setCategory] = useState(null);
-  const [subCategory, setSubCategory] = useState(null);
-  const [products, setProducts] = useState([]);
+  const classes = useStyles();
 
-  useEffect(() => {
-    productService.findAll(
-      category ? category.id : null,
-      subCategory ? subCategory.id : null,
-      null)
-      .then(products => setProducts(products));
-  }, [category, subCategory]);
-
-  const handleCategoryClick = (category) => {
-    setSubCategory(null);
-    setCategory(category);
-  };
-
-  const handleSubCategoryClick = (subCategory) => {
-    setCategory(subCategory.category);
-    setSubCategory(subCategory);
-  };
+  const homeProductsReducer = useSelector(state => state.homeProductsReducer);
+  const {categoryName, subCategoryName} = homeProductsReducer;
 
   return (
-    <Fragment>
-      <Grid container>
+      <Grid container >
         <Grid item md={2}>
-          <CategoryTree
-            onCategoryClick={handleCategoryClick}
-            onSubCategoryClick={handleSubCategoryClick}
-          />
+          <CategoryTree/>
         </Grid>
         <Grid item md={10}>
-          <Typography variant="h2">
-            {category && category.name} {subCategory && ` > ${subCategory.name}`}
+          <Typography variant="h2" className={classes.heading}>
+            {categoryName && categoryName} {subCategoryName && ` > ${subCategoryName}`}
           </Typography>
-          <ProductGrid products={products}/>
+          <HomeProductGrid/>
         </Grid>
       </Grid>
-    </Fragment>
   )
 }
 

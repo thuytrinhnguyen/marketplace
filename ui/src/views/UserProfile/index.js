@@ -56,7 +56,7 @@ function UserProfile() {
   };
 
   return (
-    <Page title={`${firstName} ${lastName}`}>
+    <Page title={`${firstName} ${lastName}`} >
       <Header/>
       <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
         <Tab label="Product"/>

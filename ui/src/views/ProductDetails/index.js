@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {productService} from "../../services/productService";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import CardMedia from "@material-ui/core/CardMedia";
 import {makeStyles} from "@material-ui/styles";
@@ -63,7 +63,14 @@ function ProductDetails() {
             {product.name}
           </Typography>
           <Typography variant="body2">
-            by {product.createdBy}
+            by
+            <Link
+              href="#"
+              variant="body2"
+              color="primary"
+              onClick={() => history.push(`/profile/${product.createdBy}`)}
+            > {product.createdBy}
+            </Link>
           </Typography>
         </Grid>
 
