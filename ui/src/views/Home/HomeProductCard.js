@@ -43,16 +43,16 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 3)
   },
   image: {
-    width: 250,
-    height: 250,
+    width: 300,
+    height: 300,
+    margin: 'centered'
   },
   img: {
     margin: 'centered',
     display: 'block',
     maxWidth: '100%',
     maxHeight: '100%',
-    paddingLeft: 30,
-    paddingRight:30,
+    paddingLeft: 60,
     paddingTop: 30,
     paddingBottom: 30
   },
@@ -80,7 +80,7 @@ function HomeProductCard({product, className, ...rest}) {
           className={classes.image}
           onClick={() => history.push(`/products/${product.id}`)}
         >
-          <img className={classes.img} alt="complex" src={product.image}/>
+          <img className={classes.img} alt={product.name} src={product.image}/>
         </ButtonBase>
         <Divider/>
         <Grid container

@@ -111,7 +111,7 @@ function Login() {
             Sign in
           </Typography>
           <Typography variant="subtitle2">
-            Sign in on the internal platform
+            Demo credentials: trinhnguyen - 123
           </Typography>
           <LoginForm
             className={classes.loginForm}
@@ -120,34 +120,33 @@ function Login() {
         </CardContent>
         <CardMedia
           className={classes.media}
-          image="/images/auth.png"
+          image="https://r9u8a7x4.stackpathcdn.com/wp-content/uploads/revslider/rotating-words/office_cover.jpg"
           title="Cover"
         >
           <Typography
             color="inherit"
             variant="subtitle1"
           >
-            Hella narvwhal Cosby sweater McSweeney&apos;s, salvia kitsch before they
-            sold out High Life.
+            Welcome to Marketplace - an e-commerce website for technology products
           </Typography>
           <div className={classes.person}>
             <Avatar
               alt="Person"
               className={classes.avatar}
-              src="/images/avatars/avatar_2.png"
+              src="https://scontent.fsyd3-1.fna.fbcdn.net/v/t1.0-9/69759729_2587043344660910_4685389306494189568_o.jpg?_nc_cat=106&_nc_sid=174925&_nc_ohc=XoifSDe09VwAX-m8vYD&_nc_ht=scontent.fsyd3-1.fna&oh=565bb81577ab677374d5fc56a64e7244&oe=5F5D401C"
             />
             <div>
               <Typography
                 color="inherit"
                 variant="body1"
               >
-                Ekaterina Tankova
+                Thuy Trinh Nguyen
               </Typography>
               <Typography
                 color="inherit"
                 variant="body2"
               >
-                Manager at inVision
+                Graduate Software Engineer
               </Typography>
             </div>
           </div>

@@ -13,9 +13,8 @@ import {homeProductsActions} from "../../actions";
 
 const useStyles = makeStyles({
   root: {
-    height: 240,
-    flexGrow: 1,
-    maxWidth: 400,
+    paddingTop: 10,
+    paddingLeft: 30
   },
 });
 

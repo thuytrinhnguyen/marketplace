@@ -24,7 +24,7 @@ function Topbar({ className, ...rest }) {
         <RouterLink to="/">
           <img
             alt="Logo"
-            src="/images/logos/logo--white.svg"
+            src="/images/logos/logo--white.png"
           />
         </RouterLink>
       </Toolbar>

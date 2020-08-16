@@ -121,7 +121,7 @@ function Header({className, ...rest}) {
         className={clsx(classes.root, className)}>
         <div
           className={classes.cover}
-          style={{backgroundImage: ``}}>
+          style={{backgroundImage: 'url("http://www.prodraw.net/fb_cover/images/fb_cover_05.jpg")'}}>
           <Button
             className={classes.changeButton}
             variant="contained">
@@ -157,8 +157,6 @@ function Header({className, ...rest}) {
             <div className={classes.actions}>
               <Button
                 color="secondary"
-                component={RouterLink}
-                to="/chat"
                 variant="contained"
               >
                 <ChatIcon className={classes.mailIcon}/>

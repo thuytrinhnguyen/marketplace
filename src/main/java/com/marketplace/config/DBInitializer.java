@@ -46,17 +46,14 @@ public class DBInitializer implements ApplicationRunner {
 
     private void initializeDb() throws IOException {
 
-        var alexUser = newUser("alexto", "Alex", "To",
-                "https://scontent.fcbr1-1.fna.fbcdn.net/v/t1.0-9/13925012_10210467995760593_2695768106647215842_n.jpg?_nc_cat=108&_nc_sid=85a577&_nc_oc=AQnQHXLBlma6OAdxUs6Mk7MWg4QIXT574ZPjo8rCwaKjxlyDeb5ueUFlj88m1ipyW7M&_nc_ht=scontent.fcbr1-1.fna&oh=7aa4bff90313325be4955e8610ee1596&oe=5EA58FF9",
-                "Software Engineer", "123");
+        var alexUser = newUser("alexto", "Alex", "To", "https://scontent.fsyd3-1.fna.fbcdn.net/v/t1.0-9/13925012_10210467995760593_2695768106647215842_n.jpg?_nc_cat=108&_nc_sid=09cbfe&_nc_ohc=HLoRymnuDE0AX80eMZJ&_nc_ht=scontent.fsyd3-1.fna&oh=4bd046e631bbeef363cceef84a156aaf&oe=5F5F7379","Software Engineer", "123");
 
         var trinhUser = newUser("trinhnguyen", "Thuy Trinh", "Nguyen",
-                "https://scontent.fcbr1-1.fna.fbcdn.net/v/t1.0-9/69759729_2587043344660910_4685389306494189568_o.jpg?_nc_cat=106&_nc_sid=7aed08&_nc_oc=AQnENH0RNRcjkEGHrTcv-Yb8Wjh2JOIaK2ethLsC2Qeej37VsHTUJlze0fc3AoI7Onk&_nc_ht=scontent.fcbr1-1.fna&oh=c3a15549dd10d894cdcb022be6f01bc3&oe=5EA7511C",
+                "https://scontent.fsyd3-1.fna.fbcdn.net/v/t1.0-9/86970421_2959197130778861_5922067530981048320_o.jpg?_nc_cat=109&_nc_sid=09cbfe&_nc_ohc=ioOXS5Np2csAX-AT6IY&_nc_ht=scontent.fsyd3-1.fna&oh=4d90be3d72de0fa7ccee652aa3248037&oe=5F5D44B0",
                 "Full Stack Developer", "123");
 
-        var charmaineUser = newUser("charmainenguyen", "Charmaine", "Nguyen",
-                "https://scontent.fcbr1-1.fna.fbcdn.net/v/t1.0-9/86970421_2959197130778861_5922067530981048320_o.jpg?_nc_cat=109&_nc_sid=85a577&_nc_oc=AQn8On7kBZ-nAKOi9lBTluSNh3JZCtEUDrtHv47xGcaXksATzxFTzy8JnLR-Vx_B9G4&_nc_ht=scontent.fcbr1-1.fna&oh=f028f26a3f7b938efa113eaa5f9bcb2c&oe=5EA755B0",
-                "Frontend Developer", "123");
+        var charmaineUser = newUser("charmainenguyen", "Charmaine", "Nguyen", "https://scontent.fsyd3-1.fna.fbcdn.net/v/t1.0-9/69759729_2587043344660910_4685389306494189568_o.jpg?_nc_cat=106&_nc_sid=174925&_nc_ohc=XoifSDe09VwAX-m8vYD&_nc_ht=scontent.fsyd3-1.fna&oh=565bb81577ab677374d5fc56a64e7244&oe=5F5D401C"
+                ,"Frontend Developer", "123");
 
         var accessoriesCat = newCategory("Accessories", alexUser.getUsername());
         var laptopsCat = newCategory("Laptops", alexUser.getUsername());

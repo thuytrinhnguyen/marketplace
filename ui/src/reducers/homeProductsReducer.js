@@ -19,7 +19,9 @@ export const homeProductsReducer = (state = initialState, action) => {
     case HOME_PRODUCTS_FILTER_BY_CATEGORY:
       return Object.assign({}, state, {
         categoryId: action.categoryId,
-        categoryName: action.categoryName
+        categoryName: action.categoryName,
+        subCategoryId: null,
+        subCategoryName: null
       });
 
     case HOME_PRODUCTS_FILTER_BY_SUBCATEGORY:
